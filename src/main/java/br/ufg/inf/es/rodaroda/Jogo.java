@@ -12,9 +12,10 @@ public class Jogo implements Subject {
     ArrayList<Jogador> participantes = new ArrayList<>();
     ArrayList<Etapa> etapasDoJogo = new ArrayList<>();
     Roleta roleta;
-    int etapas;
-    int jogadores;
-    int palavras;
+    private int etapas;
+    private int jogadores;
+    String tema;
+    
     String palavraDaVez;
     ConjuntoPalavras conjuntoPalavras = new ConjuntoPalavras();
     EstrategiaSorteio modoSorteio;
@@ -23,8 +24,21 @@ public class Jogo implements Subject {
     Painel painel = new Painel();    
     String letraApostada;
     
-    public static void main(String[] args) {
-        Jogo j = new Jogo(1, 2, 3, new ResultadoAleatorio());
+    public static void main(String[] args) {        
+        
+        Scanner leitor = new Scanner(System.in);
+        System.out.println("Tema?\n");
+        System.out.println("1 - Cidade\n2 - Filme\n3 - Profissao");
+        String temaEscolhido = leitor.nextLine();
+        System.out.println("Quantos jogadores? 1 a 3:\n");
+        int numeroJogadores = leitor.nextInt();        
+        System.out.println("Quantas etapas? 1 a 7:\n");
+        int etapasEscolhidas = leitor.nextInt();
+        
+        Jogo j = new Jogo(new ResultadoAleatorio());
+        j.setTema(temaEscolhido);
+        j.setEtapas(etapasEscolhidas);
+        j.setJogadores(numeroJogadores);
         j.iniciaJogo(j);
     }
 
@@ -32,10 +46,32 @@ public class Jogo implements Subject {
         return modoSorteio.geraSorteio();
     }
     
-    public Jogo(int jogadores, int etapas, int palavras, EstrategiaSorteio estrategia) {
-        this.etapas = etapas;
-        this.jogadores = jogadores;
-        this.palavras = palavras;
+    public int getEtapas() {
+        return etapas;
+    }
+    
+    public void setEtapas(int e) {
+        etapas = e;
+    }
+    
+    public int getJogadores() {
+        return jogadores;
+    }
+    
+    public void setJogadores(int nJogadores) {
+        jogadores = nJogadores;
+    }
+    
+    public String getTema() {
+        return tema;
+    }
+    
+    public void setTema(String t) {
+        tema = t;
+    }
+    
+    public Jogo(EstrategiaSorteio estrategia) {
+        
         this.modoSorteio = estrategia;
     }
     
@@ -50,7 +86,7 @@ public class Jogo implements Subject {
 
         while (apresentacoes != quantidade) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Ola, apresente-se! Qual seu nome?");
+            System.out.println("Ola, apresente-se! Qual o seu nome?");
             String nomeJogador = scanner.nextLine();
             jogador = new Jogador(nomeJogador, resultadoAleatorio);
             participantes.add(jogador);
@@ -63,7 +99,7 @@ public class Jogo implements Subject {
      * palavra sorteada na rodada.
      * @param palavra a palavra sorteada para a rodada atual
      * @param letra a letra escolhida pelo jogador
-     * @return um array com os indices em ocorrem a letra escolhida na palavra da rodada     * 
+     * @return um array com os indices em ocorrem a letra escolhida na palavra da rodada
      */
     public int[] retornaIndices(String palavra, String letra) {
         String letraAtual;
@@ -106,8 +142,8 @@ public class Jogo implements Subject {
         Jogador jogadorAtual;
         int vezDoJogador = 0;        
         int valorAtual;
-        int etapasRestantes = jogo.etapas;
-        palavraDaVez = conjuntoPalavras.geraPalavra();
+        int etapasRestantes = jogo.getEtapas();
+        palavraDaVez = conjuntoPalavras.geraPalavra(jogo.getTema());
         int letrasNaPalavra = palavraDaVez.length();
         boolean acertouLetra = true;
         registraObservador(painel);
@@ -125,7 +161,7 @@ public class Jogo implements Subject {
                         System.out.println(jogadorAtual.getNome() + " PERDEU TUDO!");
                         jogadorAtual.retiraTodaPontuacao();
                         
-                        if ((vezDoJogador + 1) < jogo.jogadores) {
+                        if ((vezDoJogador + 1) < jogo.getJogadores()) {
                             vezDoJogador++;
                         } else {
                             vezDoJogador = 0;
@@ -151,7 +187,7 @@ public class Jogo implements Subject {
                         jogadorAtual.atualizaPontuacao(valorAtual);
                     } else {
                         acertouLetra = false;
-                        if ((vezDoJogador + 1) < jogo.jogadores) {
+                        if ((vezDoJogador + 1) < jogo.getJogadores()) {
                             vezDoJogador++;
                         } else {
                             vezDoJogador = 0;

@@ -22,10 +22,10 @@ public class ConjuntoPalavras implements EstrategiaPalavra {
      * @return String correspondente à palavra sorteada.
      */
     @Override
-    public String geraPalavra() {
+    public String geraPalavra(String tema) {
         String palavraGerada;
         
-        abreArquivo("cidades");
+        abreArquivo(tema);
         lePalavrasNoArquivo();
         palavraGerada = retornaPalavraSorteada(palavrasDoTema);
         fechaArquivo();
@@ -57,9 +57,10 @@ public class ConjuntoPalavras implements EstrategiaPalavra {
                     palavrasDoTema.add(palavraAtual);                
             }
         } catch (NoSuchElementException e) {
-            System.err.println("File improperly formed. Terminating.");
+            System.err.println("Arquivo nao possui "
+                    + "as palavras formatadas adequadamente.");
         } catch (IllegalStateException e) {
-            System.err.println("Error reading from file. Terminating.");
+            System.err.println("Erro ao ler o arquivo.");
         }
     }
     

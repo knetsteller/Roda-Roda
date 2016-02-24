@@ -10,5 +10,5 @@ package br.ufg.inf.es.rodaroda;
  * @author Netsteller
  */
 public interface EstrategiaPalavra {
-    public String geraPalavra();
+    public String geraPalavra(String tema);
 }

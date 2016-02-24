@@ -16,6 +16,7 @@ public class Jogador {
         
         nomeJogador = nome;
         modoSorteio = estrategia;
+        pontuacao = 0;
     }
 
     public String getNome() {
@@ -53,5 +54,9 @@ public class Jogador {
     
     public void retiraTodaPontuacao() {
         pontuacao = 0;
+    }
+    
+    public int getPontuação() {
+        return pontuacao;
     }
 }
